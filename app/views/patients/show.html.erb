@@ -1,0 +1,49 @@
+<%= link_to 'Пациенты', patients_path %>
+<p> </p>
+<h2>Пациент <%= @patient.full_name%> </h2>
+<p></p>
+<h3>Расчет базового уровня метаболизма (BMR)</h3>
+
+<p>Формула Миффлина-Сан Жеора</p>
+<div style="display: flex; align-items: center; gap: 10px;">
+  <%= button_to "Рассчитать",
+                bmr_calculations_patient_path(@patient, formula_name: 'mifflin'),
+                method: :post,
+                form: { data: { turbo: true } } %>
+
+  <div id="mifflin_san_jor">
+    <span>Результат: <%= @result %></span>
+  </div>
+</div>
+
+<p>Формула Харриса-Бенедикта</p>
+<div style="display: flex; align-items: center; gap: 10px;">
+  <%= button_to "Рассчитать",
+                bmr_calculations_patient_path(@patient, formula_name: 'harris_benedict'),
+                method: :post,
+                form: { data: { turbo: true } } %>
+
+  <div id="harris_benedict">
+    <span>Результат: <%= @result %></span>
+  </div>
+</div>
+
+<h3>Индекс массы тела (BMI)</h3>
+<div style="display: flex; align-items: center; gap: 10px;">
+  <%= button_to "Рассчитать",
+                bmi_calculations_patient_path(@patient),
+                method: :post,
+                form: { data: { turbo: true } } %>
+
+  <div id="bmi_result">
+    <% if @bmi_calc.present? %>
+      <span>Результат: <%= @bmi_calc %></span>
+    <% end %>
+  </div>
+</div>
+
+<p> </p>
+<%= link_to "Сбросить расчет", patient_path(@patient), data: { turbo: false } %>
+
+<p> </p>
+<%= link_to "Посмотреть историю расчетов BMR", history_patient_path(@patient, page: params[:page].to_i + 1) %>

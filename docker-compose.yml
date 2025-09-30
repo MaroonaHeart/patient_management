@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  postgresql:
+    image: postgres:14
+    restart: always
+    environment:
+      POSTGRES_DB: patient_management_development
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  app:
+    container_name: 'patient_management_application'
+    build: .
+    command: >
+      sh -c "rails db:migrate && rails db:seed && rails server -b 0.0.0.0 -p 3000"
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/patient_management
+    depends_on:
+      - postgresql
+    environment:
+      DATABASE_HOST: postgresql
+      DATABASE_NAME: patient_management_development
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: postgres
+
+volumes:
+  postgres_data:

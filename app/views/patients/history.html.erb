@@ -1,0 +1,39 @@
+<%= link_to 'Пациент', patient_path(@patient) %>
+<p> </p>
+<table>
+  <thead>
+    <tr>
+      <th>№</th>
+      <th>Формула</th>
+      <th>Результат расчёта</th>
+      <th>Дата создания</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @bmr_calculation_histories.each do |history| %>
+      <tr>
+        <td><%= @offset += 1 %></td>
+        <td><%= history.formula %></td>
+        <td><%= history.result %></td>
+        <td><%= history.created_at.strftime('%Y-%m-%d') %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<p> </p>
+<p> </p>
+ <% if params[:page].to_i > 1 %>
+    <%= link_to "Предыдущая страница", history_patient_path(@patient, page: params[:page].to_i - 1) %>
+  <% end %>
+
+  <% (1..@total_pages).each do |page_number| %>
+  <% if page_number == params[:page].to_i || (params[:page].nil? && page_number == 1) %>
+    <strong><%= page_number %></strong>
+  <% else %>
+    <%= link_to page_number, history_patient_path(@patient, page: page_number) %>
+  <% end %>
+<% end %>
+  
+  <% if params[:page].to_i < @total_pages %>
+    <%= link_to "Следующая страница", history_patient_path(@patient, page: params[:page].to_i + 1) %>
+  <% end %>

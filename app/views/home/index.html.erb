@@ -1,0 +1,7 @@
+<h1>Главная страница</h1>
+
+<ul>
+  <li><%= link_to 'Пациенты', patients_path(page: params[:page].to_i + 1) %></li>
+  <p> </p>
+  <li><%= link_to 'Врачи', doctors_path(page: params[:page].to_i + 1) %></li>
+</ul>

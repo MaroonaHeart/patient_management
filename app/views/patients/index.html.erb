@@ -1,0 +1,55 @@
+<%= link_to 'Главная', root_path %>
+<p> </p>
+
+<%= form_with url: patients_path, method: :get, local: true do |form| %>
+  <%= form.label :full_name, "Поиск по имени:" %>
+  <%= form.text_field :full_name, value: params[:full_name] %>
+  <%= form.submit "Найти" %>
+  <p> </p>
+  
+  <%= form.label :gender, "Пол:" %>
+  
+  <%= form.radio_button :gender, 'male', checked: params[:gender] == 'male' %>
+  <%= form.label :gender, "Мужской", value: 'male' %>
+
+  <%= form.radio_button :gender, 'female', checked: params[:gender] == 'female' %>
+  <%= form.label :gender, "Женский", value: 'female' %>
+  
+  <%= form.submit "Применить" %>
+  <p> </p>
+
+  <div>
+    <%= form.label :start_age, "Возраст от:" %>
+    <%= form.number_field :start_age, value: params[:start_age], min: 0 %>
+  
+    <%= form.label :end_age, "до:" %>
+    <%= form.number_field :end_age, value: params[:end_age], min: 0 %>
+    <%= form.submit "Поиск" %>
+  </div>
+<% end %>
+
+<p> </p>
+
+<div> 
+  <% @patients.each do |patient| %>
+    <%= @offset += 1%> 
+    <%= link_to patient.full_name, patient_path(patient) %>
+    <p> </p>
+  <% end %>
+</div>
+
+ <% if params[:page].to_i > 1 %>
+    <%= link_to "Предыдущая страница", patients_path(page: params[:page].to_i - 1) %>
+  <% end %>
+
+  <% (1..@total_pages).each do |page_number| %>
+  <% if page_number == params[:page].to_i || (params[:page].nil? && page_number == 1) %>
+    <strong><%= page_number %></strong>
+  <% else %>
+    <%= link_to page_number, patients_path(page: page_number) %>
+  <% end %>
+<% end %>
+  
+  <% if params[:page].to_i < @total_pages %>
+    <%= link_to "Следующая страница", patients_path(page: params[:page].to_i + 1) %>
+  <% end %>
